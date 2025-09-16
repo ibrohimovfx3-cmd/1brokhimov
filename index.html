@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rang-barang Kalkulyator va Timer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    /* BODY & GENERAL */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      padding: 40px;
+      flex-wrap: wrap;
+      transition: background 1.5s ease;
+    }
+
+    .container {
+      background: linear-gradient(145deg, #ffffffcc, #f0f0f0cc);
+      border-radius: 25px;
+      box-shadow:
+        8px 8px 15px #c1c1c1,
+        -8px -8px 15px #ffffff;
+      padding: 30px 40px;
+      width: 350px;
+      color: #222;
+      user-select: none;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-10px);
+      box-shadow:
+        12px 12px 20px #bbb,
+        -12px -12px 20px #fff;
+    }
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      font-weight: 600;
+      color: #ff4e50;
+      background: -webkit-linear-gradient(45deg, #f2709c, #ff9472);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      user-select: none;
+    }
+
+    /* KALKULYATOR */
+    .calc-display {
+      background: linear-gradient(145deg, #ffecd2, #fcb69f);
+      border-radius: 20px;
+      padding: 15px 20px;
+      font-size: 2.3rem;
+      text-align: right;
+      box-shadow:
+        inset 4px 4px 6px #dca48c,
+        inset -4px -4px 6px #ffe2d0;
+      margin-bottom: 25px;
+      font-weight: 600;
+      color: #7d3c1f;
+      min-height: 60px;
+      overflow-x: auto;
+    }
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    button {
+      background: linear-gradient(145deg, #f7b733, #fc4a1a);
+      border: none;
+      padding: 18px 0;
+      border-radius: 18px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      box-shadow:
+        4px 4px 6px #b3540e,
+        -4px -4px 6px #ff6f3a;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background: linear-gradient(145deg, #fc4a1a, #f7b733);
+      box-shadow:
+        6px 6px 10px #a54307,
+        -6px -6px 10px #ff7c45;
+      transform: scale(1.1);
+    }
+    button.operator {
+      background: linear-gradient(145deg, #4a00e0, #8e2de2);
+      box-shadow:
+        4px 4px 6px #3c00b0,
+        -4px -4px 6px #a04cf6;
+    }
+    button.operator:hover {
+      background: linear-gradient(145deg, #8e2de2, #4a00e0);
+      box-shadow:
+        6px 6px 10px #2a0094,
+        -6px -6px 10px #b05efc;
+    }
+    #clearBtn {
+      background: linear-gradient(145deg, #ff3e3e, #ff7171);
+      box-shadow:
+        4px 4px 6px #b03232,
+        -4px -4px 6px #ff8585;
+    }
+    #clearBtn:hover {
+      background: linear-gradient(145deg, #ff7171, #ff3e3e);
+      box-shadow:
+        6px 6px 10px #a02929,
+        -6px -6px 10px #ff9393;
+    }
+    #equalsBtn {
+      grid-column: span 4;
+      background: linear-gradient(145deg, #11998e, #38ef7d);
+      box-shadow:
+        4px 4px 6px #0a6a59,
+        -4px -4px 6px #44ff93;
+    }
+    #equalsBtn:hover {
+      background: linear-gradient(145deg, #38ef7d, #11998e);
+      box-shadow:
+        6px 6px 10px #07854a,
+        -6px -6px 10px #54ffaa;
+      transform: scale(1.1);
+    }
+
+    /* TIMER */
+    .timer-input {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 12px 15px;
+      border-radius: 15px;
+      border: none;
+      margin-bottom: 25px;
+      box-shadow:
+        inset 4px 4px 8px #d9d9d9,
+        inset -4px -4px 8px #ffffff;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+    .timer-input:focus {
+      box-shadow:
+        inset 6px 6px 10px #c0c0c0,
+        inset -6px -6px 10px #ffffff;
+    }
+    .timer-display {
+      font-size: 3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 25px;
+      background: linear-gradient(145deg, #fbd786, #f7797d);
+      padding: 20px 0;
+      border-radius: 25px;
+      color: #4a1c1c;
+      box-shadow:
+        4px 4px 8px #c96d6d,
+        -4px -4px 8px #ffbab9;
+      user-select: none;
+      letter-spacing: 2px;
+    }
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+    }
+    .timer-controls button {
+      background: linear-gradient(145deg, #11998e, #38ef7d);
+      border: none;
+      padding: 14px 30px;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow:
+        4px 4px 8px #0a6a59,
+        -4px -4px 8px #44ff93;
+      transition: all 0.3s ease;
+      user-select: none;
+      text-transform: uppercase;
+    }
+    .timer-controls button:hover {
+      background: linear-gradient(145deg, #38ef7d, #11998e);
+      box-shadow:
+        6px 6px 12px #07854a,
+        -6px -6px 12px #54ffaa;
+      transform: scale(1.1);
+    }
+
+    /* Scrollbar for calc display */
+    .calc-display::-webkit-scrollbar {
+      height: 6px;
+    }
+    .calc-display::-webkit-scrollbar-track {
+      background: #f0f0f0;
+    }
+    .calc-display::-webkit-scrollbar-thumb {
+      background: #ff9472;
+      border-radius: 3px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Kalkulyator</h2>
+    <div id="calcDisplay" class="calc-display">0</div>
+    <div class="calc-buttons">
+      <button data-value="7">7</button>
+      <button data-value="8">8</button>
+      <button data-value="9">9</button>
+      <button class="operator" data-value="/">÷</button>
+      
+      <button data-value="4">4</button>
+      <button data-value="5">5</button>
+      <button data-value="6">6</button>
+      <button class="operator" data-value="*">×</button>
+      
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button class="operator" data-value="-">−</button>
+      
+      <button data-value="0">0</button>
+      <button data-value=".">.</button>
+      <button id="clearBtn">C</button>
+      <button class="operator" data-value="+">+</button>
+      
+      <button id="equalsBtn">=</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Vaqt O'lchagich (Sekundda)</h2>
+    <input type="number" id="timerInput" class="timer-input" placeholder="Sekundda kiriting" min="1" />
+    <div id="timerDisplay" class="timer-display">00:00</div>
+    <div class="timer-controls">
+      <button id="startBtn">Start</button>
+      <button id="stopBtn">Stop</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
+
+<script>
+  // Kalkulyator funksiyalari
+  const calcDisplay = document.getElementById('calcDisplay');
+  const buttons = document.querySelectorAll('.calc-buttons button');
+  let calcExpression = '';
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.getAttribute('data-value');
+      if (btn.id === 'clearBtn') {
+        calcExpression = '';
+        calcDisplay.textContent = '0';
+        return;
+      }
+      if (btn.id === 'equalsBtn') {
+        try {
+          let result = eval(calcExpression);
+          if (result === undefined) result = '';
+          calcDisplay.textContent = result;
+          calcExpression = result.toString();
+        } catch {
+          calcDisplay.textContent = 'Xato!';
+          calcExpression = '';
+        }
+        return;
+      }
+      if (val) {
+        if (calcDisplay.textContent === '0' && !isNaN(val)) {
+          calcExpression = val;
+          calcDisplay.textContent = calcExpression;
+        } else {
+          calcExpression += val;
+          calcDisplay.textContent = calcExpression;
+        }
+      }
+    });
+  });
+
+  // Vaqt o'lchagich funksiyalari
+  const timerInput = document.getElementById('timerInput');
+  const timerDisplay = document.getElementById('timerDisplay');
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let timer = null;
+  let timeLeft = 0;
+
+  function formatTime(seconds) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (timer !== null) return;
+    let inputSeconds = parseInt(timerInput.value);
+    if (isNaN(inputSeconds) || inputSeconds <= 0) {
+      alert('Iltimos, musbat sekund qiymatini kiriting.');
+      return;
+    }
+    if (timeLeft === 0) timeLeft = inputSeconds;
+    timerDisplay.textContent = formatTime(timeLeft);
+
+    timer = setInterval(() => {
+      timeLeft--;
+      timerDisplay.textContent = formatTime(timeLeft);
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        timer = null;
+        alert('Vaqt tugadi!');
+      }
+    }, 1000);
+  });
+
+  stopBtn.addEventListener('click', () => {
+    if (timer !== null) {
+      clearInterval(timer);
+      timer = null;
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    if (timer !== null) {
+      clearInterval(timer);
+      timer = null;
+    }
+    timeLeft = 0;
+    timerDisplay.textContent = '00:00';
+    timerInput.value = '';
+  });
+</script>
+
+</body>
+</html>
